@@ -14,6 +14,10 @@ const {
   CREATE_CONTACT_INFO,
   GET_CONTECT_INFO,
   UPDATE_CONTACT_INFO,
+
+  CREATE_NEW_MESSAGE,
+  DELETE_MESSAGE_BY_ID,
+  FIND_ALL_MESSAGES,
 } = require("./service");
 var router = express.Router();
 
@@ -97,6 +101,33 @@ router.patch("/contactInfo/:id", verifyAdmin, adminOnly, async (req, res) => {
 router.post("/contactInfo", async (req, res) => {
   try {
     const response = await CREATE_CONTACT_INFO(req);
+    res.send(response);
+  } catch (error) {
+    setResponse(res, { type: "Error", data: error.stack });
+  }
+});
+
+router.post("/message", async (req, res) => {
+  try {
+    const response = await CREATE_NEW_MESSAGE(req);
+    res.send(response);
+  } catch (error) {
+    setResponse(res, { type: "Error", data: error.stack });
+  }
+});
+
+router.get("/message", verifyAdmin, adminOnly, async (req, res) => {
+  try {
+    const users = await FIND_ALL_MESSAGES(req);
+    res.send(users);
+  } catch (error) {
+    setResponse(res, { type: "Error", data: error.stack });
+  }
+});
+
+router.delete("/message/:id", verifyAdmin, adminOnly, async (req, res) => {
+  try {
+    const response = await DELETE_MESSAGE_BY_ID(req);
     res.send(response);
   } catch (error) {
     setResponse(res, { type: "Error", data: error.stack });

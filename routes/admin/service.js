@@ -6,6 +6,7 @@ const {
   CATEGORY_MODEL,
   CARS_MODEL,
   CONTACT_INFO_MODEL,
+  MESSAGES_MODEL,
 } = require("../../models");
 
 const stytch = require("stytch");
@@ -161,6 +162,7 @@ module.exports = {
         body,
         {
           new: true,
+          upsert: true,
         }
       );
 
@@ -204,5 +206,50 @@ module.exports = {
     }
   },
 
-  //...........................................................videos..................................................
+  //...........................................................messages..................................................
+
+  FIND_ALL_MESSAGES: async (req) => {
+    try {
+      const messages = await MESSAGES_MODEL.find();
+
+      if (messages.length >= 1)
+        return {
+          type: "success",
+          message: `Messages found`,
+          data: messages,
+        };
+
+      return { type: "bad", message: `No Data Available`, data: [] };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  CREATE_NEW_MESSAGE: async ({ body }) => {
+    try {
+      const newMessage = await MESSAGES_MODEL.create(body);
+      const savedMessage = await newMessage.save();
+      return {
+        type: "success",
+        message: `Message created successfully`,
+        data: savedMessage,
+      };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  DELETE_MESSAGE_BY_ID: async ({ params }) => {
+    try {
+      const { id } = params;
+      const message = await MESSAGES_MODEL.findByIdAndDelete({ _id: id });
+
+      if (message)
+        return { type: "success", message: `Message deleted`, data: message };
+
+      return { type: "bad", message: `No Data Available` };
+    } catch (error) {
+      throw error;
+    }
+  },
 };
