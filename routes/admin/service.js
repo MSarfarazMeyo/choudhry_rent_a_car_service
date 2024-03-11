@@ -16,15 +16,6 @@ const {
   comparewPassword,
 } = require("../../helpers/user");
 
-const client = new stytch.Client({
-  project_id: process.env.STYTCH_PROJECT_ID,
-  secret: process.env.STYTCH_SECRET,
-  env:
-    process.env.STYTCH_ENVIRONMENT === "development"
-      ? stytch.envs.test
-      : stytch.envs.live,
-});
-
 module.exports = {
   //...........................................................auth..................................................
 
